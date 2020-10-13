@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import Navbar from "./components/navbar";
-import Home from "./components/home";
-import SearchList from "./components/search-list";
-import Single from "./components/single";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import SearchList from "./components/SearchList";
+import Single from "./components/Single";
 
 function App() {
   return (
