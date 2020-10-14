@@ -1,7 +1,7 @@
 @import '../scss/variables';
 
 nav .form-control {
-    font-size: 18px;
+    font-size: $ML-font-18;
     color: $gray-700;
 }
 nav .form-control::placeholder {
