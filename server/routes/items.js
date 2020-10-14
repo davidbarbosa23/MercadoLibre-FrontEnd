@@ -14,11 +14,17 @@ const parseResponse = (res, data = {}, type = "") => {
       lastname: process.env.AUTHOR_LASTNAME,
     },
   };
+  const categories = [];
 
   switch (type) {
+    /** Items List */
     case "search":
+      if (data.filters.length) {
+        const { path_from_root: pathFromRoot } = data.filters[0].values[0]
+        pathFromRoot.map(category => categories.push(category.name))
+      }
+
       let items = [];
-      const categories = data.filters;
       data.results
         .slice(0, process.env.RETURN_ITEMS_NUMBER || 4)
         .forEach((item, index) => {
@@ -34,12 +40,19 @@ const parseResponse = (res, data = {}, type = "") => {
             picture: item.thumbnail,
             condition: item.condition,
             free_shipping: item.shipping.free_shipping,
+            location: item.address.state_name
           };
         });
       response = { ...response, categories, items };
       break;
 
+    /** Single Item */
     case "single":
+      if (data.categories.path_from_root.length) {
+        const { path_from_root: pathFromRoot } = data.categories
+        pathFromRoot.map(category => categories.push(category.name))
+      }
+
       const price = data.item.price.toString().split(".");
       const item = {
         id: data.item.id,
@@ -49,15 +62,16 @@ const parseResponse = (res, data = {}, type = "") => {
           amount: Number(price[0]),
           decimals: Number(price[1] ?? 0),
         },
-        picture: data.item.pictures[0].url ?? "",
+        picture: data.item.pictures.length ? data.item.pictures[0].url : "",
         condition: data.item.condition,
         free_shipping: data.item.shipping.free_shipping,
         sold_quantity: Number(data.item.sold_quantity),
         description: data.description.plain_text,
       };
-      response = { ...response, item };
+      response = { ...response, categories, item };
       break;
-
+    
+    /** Break Response */
     default:
       response = { ...response, data };
       break;
@@ -91,16 +105,11 @@ router.route("/:id").get(async (req, res) => {
   try {
     const [item, description] = await Promise.all([
       axios.get(`${process.env.API}/items/${encodeURI(req.params.id)}`),
-      axios.get(
-        `${process.env.API}/items/${encodeURI(req.params.id)}/description`
-      ),
+      axios.get(`${process.env.API}/items/${encodeURI(req.params.id)}/description`)
     ]);
+    const categories = await axios.get(`${process.env.API}/categories/${encodeURI(item.data.category_id)}`);
 
-    parseResponse(
-      res,
-      { item: item.data, description: description.data },
-      "single"
-    );
+    parseResponse(res, { item: item.data, description: description.data, categories: categories.data }, "single");
   } catch (error) {
     console.log(error);
     parseResponse(res, { API: "Server Error" });
