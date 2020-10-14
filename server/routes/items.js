@@ -3,37 +3,39 @@ const axios = require("axios");
 
 /**
  * Parse Data response
- * @param {Object} res 
- * @param {Object} data 
- * @param {String} type 
+ * @param {Object} res
+ * @param {Object} data
+ * @param {String} type
  */
 const parseResponse = (res, data = {}, type = "") => {
   let response = {
     author: {
       name: process.env.AUTHOR_NAME,
       lastname: process.env.AUTHOR_LASTNAME,
-    }
+    },
   };
-  
+
   switch (type) {
     case "search":
       let items = [];
       const categories = data.filters;
-      data.results.forEach((item, index) => {
-        const price = item.price.toString().split(".");
-        items[index] = {
-          id: item.id,
-          title: item.title,
-          price: {
-            currency: item.currency_id,
-            amount: Number(price[0]),
-            decimals: Number(price[1] ?? 0)
-          },
-          picture: item.thumbnail,
-          condition: item.condition,
-          free_shipping: item.shipping.free_shipping
-        };
-      });
+      data.results
+        .slice(0, process.env.RETURN_ITEMS_NUMBER || 4)
+        .forEach((item, index) => {
+          const price = item.price.toString().split(".");
+          items[index] = {
+            id: item.id,
+            title: item.title,
+            price: {
+              currency: item.currency_id,
+              amount: Number(price[0]),
+              decimals: Number(price[1] ?? 0),
+            },
+            picture: item.thumbnail,
+            condition: item.condition,
+            free_shipping: item.shipping.free_shipping,
+          };
+        });
       response = { ...response, categories, items };
       break;
 
@@ -45,19 +47,19 @@ const parseResponse = (res, data = {}, type = "") => {
         price: {
           currency: data.item.currency_id,
           amount: Number(price[0]),
-          decimals: Number(price[1] ?? 0)
+          decimals: Number(price[1] ?? 0),
         },
-        picture: data.item.pictures[0].url ?? '',
+        picture: data.item.pictures[0].url ?? "",
         condition: data.item.condition,
         free_shipping: data.item.shipping.free_shipping,
         sold_quantity: Number(data.item.sold_quantity),
-        description: data.description.plain_text
+        description: data.description.plain_text,
       };
       response = { ...response, item };
       break;
 
-    default: 
-      response = { ...response, data }
+    default:
+      response = { ...response, data };
       break;
   }
 
@@ -89,10 +91,16 @@ router.route("/:id").get(async (req, res) => {
   try {
     const [item, description] = await Promise.all([
       axios.get(`${process.env.API}/items/${encodeURI(req.params.id)}`),
-      axios.get(`${process.env.API}/items/${encodeURI(req.params.id)}/description`),
+      axios.get(
+        `${process.env.API}/items/${encodeURI(req.params.id)}/description`
+      ),
     ]);
 
-    parseResponse(res, { item: item.data, description: description.data }, "single");
+    parseResponse(
+      res,
+      { item: item.data, description: description.data },
+      "single"
+    );
   } catch (error) {
     console.log(error);
     parseResponse(res, { API: "Server Error" });
