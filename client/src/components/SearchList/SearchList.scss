@@ -1,0 +1,18 @@
+@import "../scss/variables";
+
+.searchList {
+  .thumbnail {
+    width: 180px;
+    height: 180px;
+    overflow: hidden;
+    img {
+      min-width: 180px;
+      min-height: 180px;
+      object-fit: cover;
+    }
+  }
+
+  .itemTitle {
+    font-size: $ML-font-18;
+  }
+}
