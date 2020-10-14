@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import queryString from "query-string";
 import PriceFormatter from "../../utilities/PriceFormatter";
 
@@ -66,6 +67,10 @@ const SearchList = (props) => {
 
   return (
     <div className="container searchList">
+      <Helmet>
+        <title>{searchQuery.q} en Mercado Libre</title>
+        <meta name="description" content="La comunidad de compra y venta online más grande de América Latina." />
+      </Helmet>
       <div className="row">
         <div className="col-12 col-lg-10 mx-auto">
           <div className="jumbotron bg-white mt-3 px-3 py-0">

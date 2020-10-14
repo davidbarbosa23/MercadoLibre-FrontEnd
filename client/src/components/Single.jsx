@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import PriceFormatter from "../utilities/PriceFormatter";
 
 const Description = ({ text }) => {
@@ -58,6 +59,10 @@ const Single = (props) => {
 
   return (
     <div className="container">
+      <Helmet>
+        <title>{item.title}</title>
+        <meta name="description" content={item.description} />
+      </Helmet>
       <div className="row">
         <div className="col-12 col-lg-10 mx-auto">
           <div className="jumbotron bg-white mt-3 p-3">
