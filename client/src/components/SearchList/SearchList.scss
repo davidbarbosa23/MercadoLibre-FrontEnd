@@ -15,4 +15,26 @@
   .itemTitle {
     font-size: $ML-font-18;
   }
+
+  li {
+    position: relative;
+
+    &:not(:last-child):after {
+      content: "";
+      background-color: $gray-500;
+      height: 2px;
+      position: absolute;
+      bottom: 0;
+      left: 10px;
+      right: 10px;
+    }
+
+    &:hover {
+      box-shadow: 0 0.125rem 0.25rem rgba($gray-800, 0.15);
+
+      &:after {
+        height: 0px;
+      }
+    }
+  }
 }
