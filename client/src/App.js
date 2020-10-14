@@ -12,7 +12,7 @@ function App() {
       <div>
         <Navbar />
         <Route path="/" exact component={Home} />
-        <Route path="/items" component={SearchList} />
+        <Route path="/items" exact component={SearchList} />
         <Route path="/items/:id" component={Single} />
       </div>
     </Router>
