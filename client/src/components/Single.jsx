@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PriceFormatter from "../utilities/PriceFormatter";
 
 const Description = ({ text }) => {
   return (
@@ -31,15 +32,6 @@ const Single = (props) => {
     sold_quantity: 0,
     description: "",
   });
-
-  const priceFormatter = (amount = 0) => {
-    const formatter = Intl.NumberFormat("en", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-    });
-    return formatter.format(amount);
-  };
 
   const getCondition = (condition = "new") => {
     const availableCond = {
@@ -83,8 +75,7 @@ const Single = (props) => {
                 </small>
                 <h1 className="h4 font-weight-bold py-3 m-0">{item.title}</h1>
                 <span className="d-block h1 py-3 m-0">
-                  {priceFormatter(item.price.amount)}
-                  <sup>{("0" + item.price.decimals).slice(-2)}</sup>
+                  <PriceFormatter price={item.price} />
                 </span>
                 <button className="btn btn-secondary btn-lg btn-block my-3">
                   Comprar
