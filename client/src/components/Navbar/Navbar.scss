@@ -1,0 +1,9 @@
+@import '../scss/variables';
+
+nav .form-control {
+    font-size: 18px;
+    color: $gray-700;
+}
+nav .form-control::placeholder {
+    color: $gray-600;
+}
