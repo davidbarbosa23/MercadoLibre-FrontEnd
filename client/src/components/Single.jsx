@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+
+import { useCategories } from "../context/categories";
 import PriceFormatter from "../utilities/PriceFormatter";
 
 const Description = ({ text }) => {
@@ -19,6 +21,8 @@ const Description = ({ text }) => {
 };
 
 const Single = (props) => {
+  const { setCategories } = useCategories();
+
   const [item, setItem] = useState({
     id: "",
     title: "",
@@ -44,17 +48,23 @@ const Single = (props) => {
 
   useEffect(() => {
     const getItem = async () => {
-      let responseItem = await fetch(
+      let response = await fetch(
         `${process.env.REACT_APP_API_ROUTE}/items/${props.match.params.id}`
       );
-      responseItem = await responseItem.json();
+      response = await response.json();
 
-      if (responseItem.item !== undefined) {
-        setItem(responseItem.item);
+      if (response.item !== undefined) {
+        setItem(response.item);
+        setCategories(response.categories);
       }
     };
 
     getItem();
+
+    return () => {
+      setCategories({});
+    };
+    // eslint-disable-next-line
   }, [props.match.params.id]);
 
   return (
