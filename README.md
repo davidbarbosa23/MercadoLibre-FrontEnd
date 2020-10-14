@@ -9,7 +9,7 @@ El API (`/server`) y el cliente (`/client`) funcionan como entornos completament
 $ cd server
 $ npm i
 ```
-Es necesario crear un archivo `.env` con la información presentada en `.env.example`
+Es necesario crear un archivo `.env` con la información presentada en `.env.example`.
 ```sh
 $ npm run server
 ```
@@ -19,7 +19,7 @@ $ npm run server
 $ cd client
 $ npm i
 ```
-Es necesario crear un archivo `.env` con la información presentada en `.env.example`
+Es necesario crear un archivo `.env` con la información presentada en `.env.example`, donde `REACT_APP_API_ROUTE` corresponde a la ruta al servidor ya iniciado.
 ```sh
 $ npm start
 ```
