@@ -53,7 +53,7 @@ const parseResponse = (res, data = {}, type = "") => {
         sold_quantity: Number(data.item.sold_quantity),
         description: data.description.plain_text
       };
-      response = { ...response, item, data };
+      response = { ...response, item };
       break;
 
     default: 
